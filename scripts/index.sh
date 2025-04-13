@@ -1,8 +1,15 @@
-# This script should index the genome file specified in the first argument ($1),
-# creating the index in a directory specified by the second argument ($2).
+#!/bin/bash
 
-# The STAR command is provided for you. You should replace the parts surrounded
-# by "<>" and uncomment it.
+# Crea la carpeta de indices si no existe
+mkdir -p res/contaminants_idx
 
-# STAR --runThreadN 4 --runMode genomeGenerate --genomeDir <outdir> \
-# --genomeFastaFiles <genomefile> --genomeSAindexNbases 9
+# Comprueba si el index existe, y si no existe lo crea mediante STAR
+if [ ! -d "res/contaminants_idx" ] || [ -z "$(ls -A res/contaminants_idx)" ]; then
+    echo "Indexing contaminants..."
+    STAR --runMode genomeGenerate \
+        --genomeDir res/contaminants_idx \
+        --genomeFastaFiles res/contaminants.fasta \
+        --genomeSAindexNbases 4
+else
+    echo "Contaminants index already exists. Skipping."
+fi
